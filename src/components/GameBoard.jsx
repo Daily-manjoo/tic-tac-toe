@@ -6,15 +6,17 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-export default function GameBoard() {
+export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
   const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
   function handleSelectSquare(rowIndex, colIndex) {
     setGameBoard((prev) => {
       const updatedBoard = [...prev.map((innerArray) => [...innerArray])];
-      updatedBoard[rowIndex][colIndex] = "X"; //어느 요소가 이 중첩 배열에 있는지 알 수 있음
+      updatedBoard[rowIndex][colIndex] = activePlayerSymbol; //어느 요소가 이 중첩 배열에 있는지 알 수 있음
       return updatedBoard;
     });
+
+    onSelectSquare();
   }
 
   return (
