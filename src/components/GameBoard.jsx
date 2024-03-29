@@ -1,23 +1,27 @@
-import { useState } from "react";
-
 const initialGameBoard = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
-export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
-  const [gameBoard, setGameBoard] = useState(initialGameBoard);
+export default function GameBoard({ onSelectSquare, turns }) {
+  let gameBoard = initialGameBoard;
 
-  function handleSelectSquare(rowIndex, colIndex) {
-    setGameBoard((prev) => {
-      const updatedBoard = [...prev.map((innerArray) => [...innerArray])];
-      updatedBoard[rowIndex][colIndex] = activePlayerSymbol; //어느 요소가 이 중첩 배열에 있는지 알 수 있음
-      return updatedBoard;
-    });
+  for (const turn of turns) {
+    const { square, player } = turn;
+    const { row, col } = square;
 
-    onSelectSquare();
+    gameBoard[row][col] = player;
   }
+
+  // const [gameBoard, setGameBoard] = useState(initialGameBoard);
+  // function handleSelectSquare(rowIndex, colIndex) {
+  //   setGameBoard((prev) => {
+  //     const updatedBoard = [...prev.map((innerArray) => [...innerArray])];
+  //     updatedBoard[rowIndex][colIndex] = activePlayerSymbol; //어느 요소가 이 중첩 배열에 있는지 알 수 있음
+  //     return updatedBoard;
+  //   });
+  //   onSelectSquare();
 
   return (
     <ol id="game-board">
@@ -26,7 +30,10 @@ export default function GameBoard({ onSelectSquare, activePlayerSymbol }) {
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => handleSelectSquare(rowIndex, colIndex)}>
+                <button
+                  onClick={() => onSelectSquare(rowIndex, colIndex)}
+                  disabled={playerSymbol !== null}
+                >
                   {playerSymbol}
                 </button>
               </li>
